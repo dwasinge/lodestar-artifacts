@@ -1,0 +1,20 @@
+{
+	"uuid": "2222",
+	"artifacts":
+	[
+	    {
+	    	"uuid":"6c97b1eb-a003-4a52-b8a8-fe4ba2ccf654",
+	        "description": "e2 miro",
+	        "link_address": "http://e2-miro",
+	        "title": "E2 Miro",
+	        "type": "Miro"
+	    },
+	    {
+	    	"uuid":"6723962b-f17e-4063-84e0-08c62e3e653d",
+	        "description": "e2 weekly report",
+	        "link_address": "http://e1-report",
+	        "title": "Weekly Report One",
+	        "type": "WeeklyReport"
+	    }
+    ]
+}
