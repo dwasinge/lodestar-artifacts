@@ -40,7 +40,7 @@ public class ArtifactService {
 		List<Project> projects = gitService.getProjectsByGroup(true);
 
 		// parse engagement files for artifacts
-		List<Artifact> artifacts = projects.stream().map(gitService::createProjectTree)
+		List<Artifact> artifacts = projects.parallelStream().map(gitService::createProjectTree)
 				.map(gitService::getArtifactsFile).map(gitService::parseFile).flatMap(Collection::stream).map(a -> {
 					if (null == a.getUuid()) {
 						a.setUuid(UUID.randomUUID().toString());

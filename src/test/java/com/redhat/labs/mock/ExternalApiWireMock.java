@@ -74,12 +74,12 @@ public class ExternalApiWireMock implements QuarkusTestResourceLifecycleManager 
 
 		body = ResourceLoader.load("project-by-engagement-1.json");
 
-		stubFor(get(urlEqualTo("/api/v4/groups/1234/search?scope=project&search=1111"))
+		stubFor(get(urlEqualTo("/api/v4/groups/1234/search?scope=projects&search=1111"))
 				.willReturn(aResponse().withHeader("Content-Type", "application/json").withBody(body)));
 
 		body = ResourceLoader.load("project-by-engagement-2.json");
 
-		stubFor(get(urlEqualTo("/api/v4/groups/1234/search?scope=project&search=2222"))
+		stubFor(get(urlEqualTo("/api/v4/groups/1234/search?scope=projects&search=2222"))
 				.willReturn(aResponse().withHeader("Content-Type", "application/json").withBody(body)));
 
 

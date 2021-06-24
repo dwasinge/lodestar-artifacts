@@ -13,6 +13,8 @@ import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.redhat.labs.lodestar.model.Artifact;
 import com.redhat.labs.lodestar.model.Engagement;
@@ -27,25 +29,27 @@ import com.redhat.labs.lodestar.rest.client.GitlabRestClient;
 @ApplicationScoped
 public class GitService {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(GitService.class);
+	
 	private static final String ARTIFACT_FILE = "artifacts.json";
 	private static final String ENGAGEMENT_FILE = "engagement.json";
 
 	@ConfigProperty(name = "group.parent.id")
 	Integer groupParentId;
 
-	@ConfigProperty(name = "default.branch", defaultValue = "master")
+	@ConfigProperty(name = "default.branch")
 	String defaultBranch;
 
-	@ConfigProperty(name = "default.commit.message", defaultValue = "updated artifacts list")
+	@ConfigProperty(name = "default.commit.message")
 	String defaultCommitMessage;
 
-	@ConfigProperty(name = "default.author.name", defaultValue = "lodestar-artifacts-bot")
+	@ConfigProperty(name = "default.author.name")
 	String defaultAuthorName;
 
-	@ConfigProperty(name = "default.author.email", defaultValue = "lodestar-artifacts-bot@bot.com")
+	@ConfigProperty(name = "default.author.email")
 	String defaultAuthorEmail;
 
-	@ConfigProperty(name = "page.size", defaultValue = "20")
+	@ConfigProperty(name = "default.page.size")
 	Integer pageSize;
 
 	@Inject
@@ -56,6 +60,8 @@ public class GitService {
 	Jsonb jsonb;
 
 	ProjectTree createProjectTree(Project project) {
+
+		LOGGER.debug("creating project tree for {}", project);
 
 		List<ProjectTreeNode> treeNodes = getProjectTree(project.getId(), false);
 		return ProjectTree.builder().projectId(project.getId()).projectTreeNodes(treeNodes).build();
@@ -117,10 +123,10 @@ public class GitService {
 		Engagement engagement = jsonb.fromJson(file.getContent(), Engagement.class);
 
 		// set engagement uuid on each artifacts
-		List<Artifact> artifacts = engagement.getArtifacts();
+		List<Artifact> artifacts = null == engagement.getArtifacts() ? new ArrayList<>() : engagement.getArtifacts();
 		artifacts.stream().forEach(a -> a.setEngagementUuid(engagement.getUuid()));
 
-		return engagement.getArtifacts();
+		return artifacts;
 
 	}
 
@@ -204,7 +210,7 @@ public class GitService {
 
 	Optional<Project> findProjectByEngagementUuid(String uuid) {
 
-		List<Project> projects = gitlabRestClient.findProjectByEngagementId(groupParentId, "project", uuid);
+		List<Project> projects = gitlabRestClient.findProjectByEngagementId(groupParentId, "projects", uuid);
 		if (1 != projects.size()) {
 			return Optional.empty();
 		}

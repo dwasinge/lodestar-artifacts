@@ -13,6 +13,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders;
+import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import com.redhat.labs.lodestar.model.gitlab.File;
@@ -21,6 +22,7 @@ import com.redhat.labs.lodestar.model.gitlab.Project;
 @Path("/api/v4")
 @RegisterRestClient(configKey = "gitlab.api")
 @RegisterClientHeaders(GitlabTokenFactory.class)
+@RegisterProvider(value = GitLabApiExceptionMapper.class, priority = 50)
 @Produces("application/json")
 public interface GitlabRestClient {
 
