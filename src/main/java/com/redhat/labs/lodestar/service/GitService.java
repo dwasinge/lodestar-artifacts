@@ -42,7 +42,7 @@ public class GitService {
 	@ConfigProperty(name = "default.author.name", defaultValue = "lodestar-artifacts-bot")
 	String defaultAuthorName;
 
-	@ConfigProperty(name = "default.author.email", defaultValue = "lodestar-backend-bot@bot.com")
+	@ConfigProperty(name = "default.author.email", defaultValue = "lodestar-artifacts-bot@bot.com")
 	String defaultAuthorEmail;
 
 	@ConfigProperty(name = "page.size", defaultValue = "20")
