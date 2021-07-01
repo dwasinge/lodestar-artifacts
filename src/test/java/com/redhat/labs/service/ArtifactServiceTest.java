@@ -33,12 +33,13 @@ class ArtifactServiceTest {
 
 	@Inject
 	ArtifactService artifactService;
-
+	
 	@Inject
 	Jsonb jsonb;
 
 	@BeforeEach
-	void setup() {
+	void setUp() {
+		artifactService.purge();
 		artifactService.refresh();
 	}
 
@@ -79,7 +80,7 @@ class ArtifactServiceTest {
 		modifyOne.setDescription("Updated");
 
 		// when
-		artifactService.processArtifacts(Arrays.asList(newOne, modifyOne), Optional.empty(), Optional.empty());
+		artifactService.process(Arrays.asList(newOne, modifyOne), Optional.empty(), Optional.empty());
 
 		// then
 		GetListOptions options = new GetListOptions();
@@ -110,7 +111,7 @@ class ArtifactServiceTest {
 				.linkAddress("http://a-new-one").title("New One").type("typeOne").build();
 
 		// when
-		artifactService.processArtifacts(Arrays.asList(newOne), Optional.empty(), Optional.empty());
+		artifactService.process(Arrays.asList(newOne), Optional.empty(), Optional.empty());
 
 		// then
 		GetListOptions options = new GetListOptions();

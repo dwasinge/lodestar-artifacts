@@ -1,0 +1,10 @@
+[
+	{
+		"name" : "master",
+		"default" : true
+	},
+	{
+		"name" : "other",
+		"default" : false
+	}
+]

@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,6 +40,7 @@ class ArtifactResourceTest {
 
 	@BeforeEach
 	void setup() {
+		service.purge();
 		service.refresh();
 	}
 
@@ -178,9 +180,18 @@ class ArtifactResourceTest {
 		given().contentType(ContentType.JSON).body(requestBody).post("/api/artifacts").then().statusCode(200);
 
 		JsonPath path = given().queryParam("engagementUuid", "1111").when().get("/api/artifacts").then().statusCode(200).extract().jsonPath();
+
 		assertEquals(2, path.getList(".").size());
-		assertEquals("newType", path.get("[1].type"));
-		assertEquals("UPDATED", path.get("[0].description"));
+
+		String a0Type = path.getString("[0].type");
+		String a0Desc = path.getString("[0].description");
+
+		String a1Type = path.getString("[1].type");
+		String a1Desc = path.getString("[1].description");
+
+		boolean newTypeFound = "newType".equals(a0Type) || "newType".equals(a1Type);
+		boolean descFound = "UPDATED".equals(a0Desc) || "UPDATED".equals(a1Desc);
+		assertTrue(newTypeFound && descFound);
 
 		path = given().queryParam("engagementUuid", "2222").when().get("/api/artifacts").then().statusCode(200).extract().jsonPath();
 		assertEquals(1, path.getList(".").size());

@@ -6,6 +6,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.put;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,9 +25,18 @@ public class ExternalApiWireMock implements QuarkusTestResourceLifecycleManager 
 		wireMockServer = new WireMockServer();
 		wireMockServer.start();
 
+		// project repository branches
+
+        String body = ResourceLoader.load("project-repository-branches.json");
+        
+        stubFor(get(urlPathMatching("/api/v4/projects/([0-9]*)/repository/branches")).willReturn(aResponse()
+                .withHeader("Content-Type",  "application/json")
+                .withBody(body)
+                ));
+
 		// project trees
 
-		String body = ResourceLoader.load("project-1-tree.json");
+		body = ResourceLoader.load("project-1-tree.json");
 
 		stubFor(get(urlEqualTo("/api/v4/projects/1/repository/tree?recursive=false"))
 				.willReturn(aResponse().withHeader("Content-Type", "application/json").withBody(body)));

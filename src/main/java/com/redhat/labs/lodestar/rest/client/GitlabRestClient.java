@@ -16,6 +16,7 @@ import org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
+import com.redhat.labs.lodestar.model.gitlab.Branch;
 import com.redhat.labs.lodestar.model.gitlab.File;
 import com.redhat.labs.lodestar.model.gitlab.Project;
 
@@ -48,6 +49,10 @@ public interface GitlabRestClient {
 	@GET
 	@Path("/projects/{id}/repository/tree")
 	Response getProjectTree(@PathParam("id") @Encoded Integer id, @QueryParam("recursive") boolean recursive);
+
+	@GET
+	@Path("/projects/{id}/repository/branches")
+	List<Branch> findProjectBranches(@PathParam("id") @Encoded Integer projectId);
 
 	/*
 	 * Files

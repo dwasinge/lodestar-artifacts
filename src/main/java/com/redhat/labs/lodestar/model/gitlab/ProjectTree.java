@@ -44,5 +44,9 @@ public class ProjectTree {
 	public Optional<ProjectTreeNode> getArtifactsProjectTreeNode() {
 		return Optional.ofNullable(getArtifactJsonFileNode().orElse(getEngagementJsonFileNode().orElse(null)));
 	}
+	
+	public boolean hasArtifactsJsonFile() {
+		return getArtifactJsonFileNode().isPresent();
+	}
 
 }
